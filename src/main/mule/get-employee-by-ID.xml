@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="df00c62c-4549-4fe0-a0cd-9b98f6198488" basePath="emp_sapi" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<db:config name="Database_Config" doc:name="Database Config" doc:id="34b16abd-635b-4bbd-8713-d30bd5dc6351" >
+		<db:my-sql-connection host="localhost" port="3306" user="test" password="newpassword" database="employee_db" />
+	</db:config>
+	<flow name="get-ONE-employee" doc:id="81578129-e215-4861-a729-f5c20a9ab36c" >
+		<http:listener doc:name="Listener" doc:id="93051098-4379-428f-9c3a-d52f2ee18e8e" config-ref="HTTP_Listener_config" path="get-employee"/>
+		<db:select doc:name="Select" doc:id="1be745eb-9c2f-4bee-821e-93472981489e" config-ref="Database_Config">
+			<db:sql ><![CDATA[SELECT * FROM employee_details WHERE `id_employee`= :ID]]></db:sql>
+			<db:input-parameters ><![CDATA[#[ID: attributes.queryParams.employeeID]]]></db:input-parameters>
+		</db:select>
+		<ee:transform doc:name="Transform Message" doc:id="8c211c2e-f9ff-43d1-8275-cd02ffc7f4e9" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	employeeID: payload01.id_employee,
+	employeeName: payload01.name_employee default "",
+	employeeStatus: payload01.email_employee default "",
+	employeeEmail: payload01.status_employee default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>

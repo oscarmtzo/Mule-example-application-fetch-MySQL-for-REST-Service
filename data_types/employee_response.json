@@ -1,0 +1,16 @@
+[
+    {
+        "employeeID": 100,
+        "employeeName": "Example1",
+        "employeeStatus": "Active",
+        "employeeEmail": "something@example.com"
+
+    },
+    {
+        "employeeID": 101,
+        "employeeName": "Example1",
+        "employeeStatus": "Active",
+        "employeeEmail": "something@example.com"
+
+    }
+]
