@@ -149,6 +149,7 @@ This part includes:
     ```
     2.  `<db:delete>` XML tag is the *Delete* processor for the *Database* module, uses several attributes in which `config-ref="Database_Config"` refers to the following configuration:
     ```
+    protocol: http
     host: localhost
     port: 3306
     user: test
